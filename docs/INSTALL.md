@@ -1,24 +1,26 @@
 # Installing AirBridge on your Android phone
 
-The app file is `AirBridge-debug.apk`, attached to the GitHub release
-[v0.1.0-debug](https://github.com/edge-sentinel-crypto/airbridge-android/releases/tag/v0.1.0-debug). Direct download link:
+The app file is `AirBridge-debug.apk` (version 0.2.0, 29,284,516 bytes), attached to the GitHub
+release [v0.2.0-debug](https://github.com/edge-sentinel-crypto/airbridge-android/releases/tag/v0.2.0-debug). Direct download link:
 
 ```
-https://github.com/edge-sentinel-crypto/airbridge-android/releases/download/v0.1.0-debug/AirBridge-debug.apk
+https://github.com/edge-sentinel-crypto/airbridge-android/releases/download/v0.2.0-debug/AirBridge-debug.apk
 ```
 
 Requirements: Android 10 or newer, and the phone on the same Wi-Fi network as the speakers.
 
+Already using v0.1.0-debug? Install this file the same way; Android updates AirBridge in place (same
+package name and signing key) and keeps your speakers, volumes and pairings. See section 6.
+
 ## 0. Check the file (optional, recommended)
 
-The expected SHA-256 is:
+The expected SHA-256 of the v0.2.0-debug `AirBridge-debug.apk` is:
 
 ```
-ad9ed70a1c9a80bcd333da8b28783187b7635436d63e7a34f51068f0d78ec279
+d4f047de85ba79afa138434ab0897aa55f9828c3cf446b09ea9cceb76c3ee0e2
 ```
 
-It is also attached to the release as `AirBridge-debug.apk.sha256`. On a computer, in the folder
-where you saved the APK:
+On a computer, in the folder where you saved the APK:
 
 ```powershell
 # Windows PowerShell (prints the hash in upper case; compare without regard to case)
@@ -96,7 +98,22 @@ Every time you start streaming, Android asks the capture question again. That is
 ## 4. Everyday use
 
 - **Volume per speaker:** use the slider under each speaker. 0 % mutes that speaker.
+- **Master volume:** the **Master volume** slider above the speaker list moves every speaker that is
+  on and keeps their balance. Dragging it down and back up returns each speaker to where it was. If
+  every speaker is at 0 %, the master raises them all together.
 - **Add or remove a speaker while playing:** flip its switch.
+- **All on / All off:** the first chip above the speaker list turns every speaker on (**All on**),
+  or, when they are all on, every speaker off (**All off**). It works while streaming too.
+- **Speaker groups:** turn on the speakers you want together, tap **Save group** and give the group a
+  name (for example "Downstairs"). Tap the group's chip later to play exactly those speakers; the
+  chip shows a check mark while they are the ones playing. Speakers of the group that are not on the
+  network are skipped (the chip then shows, for example, "2/3"). Long-press a chip to rename or
+  delete the group. Saving under an existing group's name replaces its speakers.
+- **Sync offset:** if one speaker sounds slightly ahead of or behind the others, open its ⋮ menu >
+  **Sync offset**. Slide to a positive value to delay it (for example **+40 ms (delay)**) or to a
+  negative value to make it play earlier (for example **-25 ms (earlier)**), up to 250 ms either way
+  in 5 ms steps. The change applies while the music plays, without reconnecting; **Reset** sets it
+  back to 0. A small badge such as **+40 ms** on the speaker card shows the offset.
 - **Stop:** tap **Stop streaming** in the app, or **Stop** in the notification.
 - **Phone also plays the music:** Android does not let AirBridge silence the original app. Turn the
   phone's own volume down. On most phones this does not change what the speakers get; check once
@@ -135,6 +152,14 @@ Open its ⋮ menu and choose **Force AirPlay 1**, then turn it off and on again.
 receivers do not accept the timing method Android apps can use (details in
 [PLAN.md, section 7.6](PLAN.md#76-timing-ntp-not-ptp)).
 
+### Two speakers play slightly out of step
+
+All speakers share one clock, but receivers (especially AirPlay 1 next to AirPlay 2) can differ by a
+few tens of milliseconds. Open the ⋮ menu of the speaker that is ahead and give it a positive sync
+offset (it plays later), or give the one that lags a negative offset. Adjust in small steps while
+the music plays. If a speaker skips or pauses briefly when you change the offset, that is it
+re-aligning; it should then play steadily.
+
 ### The speaker asks for a code (Apple TV) or a password
 
 - **Code:** the TV shows a 4-digit code; the speaker card says "Enter code". Type the code. AirBridge
@@ -159,7 +184,9 @@ log. **Copy** puts the log on the clipboard so you can send it.
 
 ## 6. Update or remove
 
-- Update: install the new APK the same way. With ADB use `adb install -r`.
+- Update: install the new APK the same way. With ADB use `adb install -r`. v0.2.0-debug has the same
+  package name (`com.airbridge.airplay`) and signing key as v0.1.0-debug and a higher version code
+  (2), so it installs over v0.1.0-debug as an update and keeps your settings and pairings.
 - Remove: long-press the AirBridge icon > App info > Uninstall. This also deletes saved pairings.
 
 ## 7. Building the APK from source
@@ -198,7 +225,9 @@ EOF
 ```
 
 Clone and build on the Linux file system (under WSL, inside your Linux home folder, not on a
-Windows drive), then test, assemble and lint:
+Windows drive), then test, assemble and lint. (The same project is also published in the
+`airbridge-android/` folder of `https://github.com/edge-sentinel-crypto/edge-sentinel`; there, run
+the commands from inside that folder.)
 
 ```bash
 . $HOME/android-toolchain/env.sh
